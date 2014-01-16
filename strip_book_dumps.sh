@@ -1,0 +1,1 @@
+/git/invsblduck/chef_dev_utils/strip_book_dumps.sh

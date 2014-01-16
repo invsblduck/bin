@@ -1,0 +1,2 @@
+#!/bin/sh
+ping -c2 -l2 -W2 8.8.8.8  |grep 64\ bytes

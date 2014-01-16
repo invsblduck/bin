@@ -1,0 +1,1 @@
+/git/invsblduck/chef_dev_utils/rcb/rcb_knife_bulkdelete.sh

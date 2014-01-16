@@ -1,0 +1,1 @@
+/git/invsblduck/chef_dev_utils/vm_kick/rekick-fakecloud.sh
