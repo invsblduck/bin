@@ -34,7 +34,7 @@ fi
 #
 export case=
 export word=
-export patt=${pat:-jiggywiggy}
+export patt=jiggywiggy
 
 export red='[1;31m'
 export mag='[35m'
