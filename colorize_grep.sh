@@ -9,12 +9,12 @@ lazy grep pipeline. eg.,
 
     grep --recursive foo /tmp | grep baz | grep blah
 
-if you are using --color=auto or similar with all the greps above, the
-final output contains filenames that are no longer colorized and there
-is a smattering of "blah" highlighted anywhere, even for the filenames
-themselves (ie., context is lost from the very first grep in the pipeline). 
-this script will re-color the filenames appropriately and only highlight
-file CONTENT in the output stream matching <PATTERN>.
+if you are using --color with the grep commands above, the final output
+contains filenames that are no longer colorized, and there is a smattering
+of "blah" highlighted anywhere (even for the filenames themselves, ie.
+context is lost from the very first grep in the pipeline).  this script
+will re-color the filenames appropriately and only highlight actual
+*file content* in the output stream matching <PATTERN>.
 
 EOF
 }
