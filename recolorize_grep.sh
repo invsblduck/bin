@@ -82,7 +82,7 @@ cat - |\
 while read -r line; do
     # organize grep output --
     # separate the filename from actual matching data
-    file="$(echo $line  |sed -r 's/^([^:]*):.*/\1/')"
+    file="$(echo "$line"  |sed -r 's/^([^:]*):.*/\1/')"
     match="$(echo "$line" |sed -r 's/^[^:]*:(.*)/\1/')"
 
     # colored version of filename and colon character
