@@ -1,1 +1,0 @@
-/git/invsblduck/chef_dev_utils/rcb/rcb_resync_chefserver.sh
