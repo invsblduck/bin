@@ -1,7 +1,9 @@
 #!/bin/sh
 
 if ! pgrep vpnc >/dev/null; then
-    if [ -e /run/resolvconf/interfaces/tun0 ]; then
-        sudo resolvconf -d tun0
-    fi
+    for iface in tun0 enp0s3; do
+        if [ -e /run/resolvconf/interfaces/$iface ]; then
+            sudo resolvconf -d $iface
+        fi
+    done
 fi
