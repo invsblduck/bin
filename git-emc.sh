@@ -4,6 +4,7 @@ DOTRC=~/.git-emc
 
 # NB!: raw controls chars below (don't cut/paste with mouse), sorry.
 RED="[01;31m"
+YLW="[01;33m"
 DIR="[01;44;33m"
 OFF="[0m"
 
@@ -12,14 +13,19 @@ bail() {
     exit 1
 }
 
+ignore() {
+    echo "${YLW}Ignoring.${OFF}"
+}
+
 if ! [ -f $DOTRC ]; then
     cat <<EOF
 Please create $DOTRC with contents similar to the following:
 
-    USER=       # username for 'hub' command
-    EMAIL=      # email address for commits and such
-    DIRSPEC=    # word that *SHOULD* be in your CWD when running this script
-                # (otherwise we print a warning and prompt)
+    EMC_USER=       # Github username
+    EMC_PASS=       # Github password
+    EMC_EMAIL=      # email address for commits and such
+    EMC_DIRSPEC=    # word that *SHOULD* be in your CWD when running this script
+                    # (otherwise we print a warning and prompt)
 
 then run this script again.
 EOF
@@ -38,7 +44,7 @@ gitdir=$(git rev-parse --git-dir)
 config=$gitdir/config
 
 # set more barriers
-if ! [[ `pwd` =~ $DIRSPEC ]]; then
+if ! [[ `pwd` =~ $EMC_DIRSPEC ]]; then
     cat <<EOF
 Your current path is:
 
@@ -57,23 +63,31 @@ then
     echo "==> adding email to repo config"
     cat >>$config <<EOF
 [user]
-	email = $EMAIL
+	email = $EMC_EMAIL
 EOF
 else
     echo "[user] section already exists in $config!"
-    bail
+    ignore
 fi
 
 ##
-# configure user
+# configure hub username
 #
 if ! grep -q '^\[github]' $config; then
     echo "==> adding user to repo config"
     cat >>$config <<EOF
 [github]
-	username = $USER
+	username = $EMC_USER
 EOF
 else
     echo "[github] section already exists in $config!"
-    bail
+    ignore
+fi
+
+##
+# configure hub username
+#
+if grep -Eq '^[[:space:]]*url = https://github\.emcrubicon\.com' $config; then
+    echo "==> updating remote with user/pass"
+    sed -i -r "s#^([[:space:]]*url = https://)(github\\.emcrubicon\\.com.*)#\1${EMC_USER}:${EMC_PASS}@\2#" $config
 fi
