@@ -1,1 +1,1 @@
-/home/duck/git/invsblduck/chef_dev_utils/summarize_chef_run.sh
+/git/invsblduck/chef_dev_utils/summarize_chef_run.sh
