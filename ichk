@@ -1,2 +1,10 @@
 #!/bin/sh
-ping -c2 -l2 -W2 8.8.8.8  |grep 64\ bytes
+
+if [ -n "$1" ]; then
+    echo "waiting for inet..."
+    while ! ping -c2 -l2 -W2 8.8.8.8 |grep '64 bytes'; do
+        sleep 1
+    done
+else
+    ping -c2 -l2 -W2 8.8.8.8  |grep '64 bytes'
+fi
