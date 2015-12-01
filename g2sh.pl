@@ -105,7 +105,8 @@ else {
     @files = qw( ~/g2sh.pl ~/.vimrc ~/.vim ~/.toprc ~/.bash_profile
                 ~/.bashrc ~/.bash ~/.inputrc ~/.dircolors ~/.motd );
 }
-system ("rsync -aLk -i --info=flist1,stats0" .
+#system ("rsync -aLk -i --info=flist1,stats0" .
+system ("rsync -aLk -i " .
         " --exclude='**/*.swp' --exclude='**/*.un~' @files $host:");
 
 # ssh your bad self there ...
