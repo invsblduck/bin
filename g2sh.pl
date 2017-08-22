@@ -6,8 +6,8 @@ eval { require Ops::Helper };
 $helper = ($@) ? 0 : 1;
 
 # add krb5 to $PATH
-#$ENV{'PATH'} .= ":/usr/kerberos/bin:/usr/kerberos/sbin"
-#    if ($ENV{'PATH'} !~ /kerberos/);
+$ENV{'PATH'} .= ":/usr/kerberos/bin:/usr/kerberos/sbin"
+    if ($ENV{'PATH'} !~ /kerberos/);
 
 # get destination host
 (@ARGV) ? ($host,$ping) = @ARGV : die "usage: $0 <host>\n";
@@ -105,6 +105,7 @@ else {
     @files = qw( ~/g2sh.pl ~/.vimrc ~/.vim ~/.toprc ~/.bash_profile
                 ~/.bashrc ~/.bash ~/.inputrc ~/.dircolors ~/.motd );
 }
+
 #system ("rsync -aLk -i --info=flist1,stats0" .
 system ("rsync -aLk -i " .
         " --exclude='**/*.swp' --exclude='**/*.un~' @files $host:");
