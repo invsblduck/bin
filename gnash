@@ -1,0 +1,22 @@
+#!/bin/bash
+
+die() {
+    >&2 echo "${0##*/}: $*"
+    exit 1
+}
+
+info() { echo "==> $*"; }
+
+# TODO getopts
+[ -z "$1" ] && die "usage: $0 <host>"
+
+info "checking port 22"
+nc -zw2 "$1" 22 || die "'$1' not reachable on port 22"
+
+# TODO clean known_hosts?
+info "checking auth"
+env SSH_ASKPASS=~/bin/tellpass.sh setsid -w ssh-copy-id "$1" 2>/dev/null
+[ "$?" != 0 ] && die "couldn't install pubkey on '$1'"
+
+info "xfering"
+g2sh.pl "$1"
