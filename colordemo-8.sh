@@ -4,6 +4,8 @@
 # Modified by Aaron Griffin
 # and further by Kazuo Teramoto
 
+# See https://en.wikipedia.org/wiki/ANSI_escape_code#3/4_bit
+
 
 FGNAMES=(' black ' '  red  ' ' green ' ' yellow' '  blue ' 'magenta' '  cyan ' ' white ')
 BGNAMES=('DFT' 'BLK' 'RED' 'GRN' 'YEL' 'BLU' 'MAG' 'CYN' 'WHT')
