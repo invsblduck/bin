@@ -93,22 +93,32 @@ chomp($current_host = `hostname`);
 
 # scp shiz to target $host
 if ($current_host == 'archie') {
-
+    # pull stuff from fakecloud (not $HOME)
     $dotfiles = '/git/invsblduck/fakecloud_configs/dotfiles';
-    foreach (qw(.vim* .toprc .bash* .inputrc .dircolors)) {
+    foreach (qw(.vim* .toprc .bash* .inputrc .dircolors .tmux*)) {
         push @files, "$dotfiles/$_";
     }
     push @files, ('/git/invsblduck/bin/g2sh.pl', '~/.motd');
+
+    # XXX what a bad idea
+    print "Checking if host is RH 7...";
+    if (not system "ssh $host 'uname -r |grep -qw el7'") {
+        push @files, '/data/lmi/centos/tmux-2.4-2.gf.el7.x86_64.rpm';
+        print "yes!";
+    }
+    print "\n";
 }
 else {
 
     @files = qw( ~/g2sh.pl ~/.vimrc ~/.vim ~/.toprc ~/.bash_profile
-                ~/.bashrc ~/.bash ~/.inputrc ~/.dircolors ~/.motd );
+                 ~/.bashrc ~/.bash ~/.inputrc ~/.dircolors ~/.motd
+                 ~/.tmux* ~/tmux*.rpm);
 }
 
 #system ("rsync -aLk -i --info=flist1,stats0" .
-system ("rsync -aLk -i " .
-        " --exclude='**/*.swp' --exclude='**/*.un~' @files $host:");
+system ("rsync -aLk -i --ignore-missing-args" .
+        " --exclude='**/*.swp' --exclude='**/*.un~' --exclude='**/.git'" .
+        " @files $host:");
 
 # ssh your bad self there ...
 exec ("ssh $host") or die "could not exec(): $!\n";
