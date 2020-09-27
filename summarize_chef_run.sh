@@ -1,1 +1,0 @@
-/git/invsblduck/chef_dev_utils/summarize_chef_run.sh

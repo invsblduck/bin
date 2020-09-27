@@ -1,1 +1,0 @@
-/git/invsblduck/chef_dev_utils/vm_kick/knife/knife_server_rebuild.sh
