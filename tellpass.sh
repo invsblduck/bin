@@ -1,1 +1,2 @@
-cat ~/.ssh/creds </dev/null
+#!/bin/bash
+cat ~/.ssh/creds.ipa
