@@ -1,8 +1,7 @@
 #!/bin/bash
 
 name="$1"
-
-DOTRC=~/.git-${name}
+DOTRC=~/.git-"${name}"
 
 # NB!: raw controls chars below (don't cut/paste with mouse), sorry.
 RED="[01;31m"
@@ -19,9 +18,9 @@ ignore() {
     echo "${YLW}Ignoring.${OFF}"
 }
 
-if ! [ -f $DOTRC ]; then
+if [ ! -f "${DOTRC}" ]; then
     cat <<EOF
-Please create $DOTRC with contents similar to the following:
+Please create ${DOTRC} with contents similar to the following:
 
     GIT_USER=       # Github username
     GIT_PASS=       # Github password
@@ -34,22 +33,26 @@ EOF
 fi
 
 # source config file
-source $DOTRC
+source "${DOTRC}"
 
 # set barriers
 set -e
 trap bail ERR
 
 # find git repo config
-gitdir=$(git rev-parse --git-dir)
-config=$gitdir/config
+gitdir="$(git rev-parse --git-dir)"
+config="${gitdir}/config"
 
 # set more barriers
-if ! [[ `pwd` =~ $GIT_DIRSPEC ]]; then
+cwd="$(pwd)"
+real_cwd="$(pwd -P)"
+
+if ! [[ ${real_cwd} =~ ${GIT_DIRSPEC} ]]; then
     cat <<EOF
 Your current path is:
 
-    ${DIR}`pwd`${OFF}
+    ${DIR}${cwd}${OFF}
+    (physical path: ${DIR}${real_cwd}${OFF})
 
 EOF
     read -p "${RED}Are you sure you want to modify this repo?${OFF} [y/N]: "
@@ -59,29 +62,29 @@ fi
 ##
 # configure email
 #
-if ! grep -q '^\[user]' $config
+if ! grep -q '^\[user]' "${config}"
 then
     echo "==> adding email to repo config"
-    cat >>$config <<EOF
+    cat >>"${config}" <<EOF
 [user]
-	email = $GIT_EMAIL
+	email = ${GIT_EMAIL}
 EOF
 else
-    echo "[user] section already exists in $config!"
+    echo "[user] section already exists in ${config}!"
     ignore
 fi
 
 ##
 # configure hub username
 #
-if ! grep -q '^\[github]' $config; then
+if ! grep -q '^\[github]' "${config}"; then
     echo "==> adding user to repo config"
-    cat >>$config <<EOF
+    cat >>"${config}" <<EOF
 [github]
-	user = $GIT_USER
+	user = ${GIT_USER}
 EOF
 else
-    echo "[github] section already exists in $config!"
+    echo "[github] section already exists in ${config}!"
     ignore
 fi
 
