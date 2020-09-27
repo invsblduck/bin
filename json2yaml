@@ -1,0 +1,6 @@
+#!/usr/bin/ruby
+
+require 'json'
+require 'yaml'
+
+print YAML.dump(JSON.load(ARGF.read()))
