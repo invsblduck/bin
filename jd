@@ -77,7 +77,7 @@ fi
 
 for key in $(cat "${keys1}-common")
 do
-    printf "${key}" |colorize gray
+    printf "%s" "${key}" |colorize gray
 
     a="$(jq -r ".${key}" <"$1")"
     b="$(jq -r ".${key}" <"$2")"
@@ -86,8 +86,8 @@ do
     then
         cat <<__EOT__
 :
-  < $(printf "$a" |colorize red)
-  > $(printf "$b" |colorize green)
+  < $(printf "%s" "$a" |colorize red)
+  > $(printf "%s" "$b" |colorize green)
 
 __EOT__
         echo "${key}" >>${keys1}-diff
