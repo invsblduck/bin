@@ -55,7 +55,7 @@ indent() {
 }
 
 colorize() {
-    local -A colors=(gray '01;30' red 31 green 32)
+    local -A colors=(gray '01;30' red 31 green 32 white '01;37')
     local color="$1"
 
     printf "\033[${colors[$color]}m"
@@ -63,14 +63,19 @@ colorize() {
     printf "\033[0m"
 }
 
+kill_line() {
+    # erase current line ("\33[2K") and return the carriage ("\r")
+    printf "\033[2K\r"
+}
+
 if [ -s "${keys1}-uniq" ]; then
-    echo "Only in $1:"
+    echo "Only in $1:" |colorize white
     indent "${keys1}-uniq" |colorize red
     echo
 fi
 
 if [ -s "${keys2}-uniq" ]; then
-    echo "Only in $2:"
+    echo "Only in $2:" |colorize white
     indent "${keys2}-uniq" |colorize green
     echo
 fi
@@ -94,13 +99,12 @@ __EOT__
         continue  # skip printf statement below
     fi
 
-    # erase current line ("\33[2K") and return the carriage ("\r")
-    printf "\033[2K\r"
+    kill_line
 done
 
 if [ -s "${keys1}-diff" ]
 then
-    echo "Identical:"
+    echo "Identical:" |colorize white
     /bin/grep -vxFf "${keys1}-diff" "${keys1}-common" |sed 's/^/  /'
 fi
 
