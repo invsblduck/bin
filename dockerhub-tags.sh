@@ -16,4 +16,5 @@ echo "fetching tags for image \`${image}'..."
 curl -sS "${HUB_URL}/${image}/tags" \
     | sed -e 's/[][]//g' -e s/\"//g -e 's/ //g' \
     | tr '}' '\n'  \
-    | awk -F: '{print $3}'
+    | awk -F: '{print $3}' \
+    | sort -V

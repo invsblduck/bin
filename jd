@@ -86,9 +86,10 @@ do
 
     a="$(jq -r ".${key}" <"$1")"
     b="$(jq -r ".${key}" <"$2")"
-   
+
     if [ "$a" != "$b" ]
     then
+        # print colon after key name and show diff
         cat <<__EOT__
 :
   < $(printf "%s" "$a" |colorize red)
@@ -96,9 +97,8 @@ do
 
 __EOT__
         echo "${key}" >>${keys1}-diff
-        continue  # skip printf statement below
+        continue  # don't erase key name!
     fi
-
     kill_line
 done
 

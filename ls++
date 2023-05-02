@@ -474,67 +474,54 @@ sub relative_time {
   my ($cur, $sec) = @_;
   my $delta = $cur - $sec;
   my ($unit, $ret);
+  my $min  = 60;
+  my $hrs  = 60 * $min;
+  my $days = 24 * $hrs;
+  my $mos  = 30 * $days;
+  my $yrs  = 12 * $mos;
 
-  ## 0 < sec < 60
-  $unit = "sec ";
+  ## seconds
   $ret = $delta;
+  return relative_time_format(fg($c[3]), $ret, 'sec  ')
+      if $delta <= 45;
+  return relative_time_format(fg($c[15]), '<1', 'min  ')
+      if ($delta > 45) && ($delta < 60);
 
-  return relative_time_format(fg($c[3]), "<", $unit)
-    if $delta < 10;
-  return relative_time_format(fg($c[3]), $ret, $unit)
-    if $delta < 60;
-
-  ## 1 < min < 45
-  $unit = "min ";
+  ## minutes
   $ret = int($ret/60);
+  return relative_time_format(fg($c[15]), $ret, 'min  ')
+    if $delta <= 45 * $min;
+  return relative_time_format(fg($c[3]), '<1', 'hour ')
+      if ($delta > 45 * $min) && ($delta < 60 * $min);
 
-  return relative_time_format(fg($c[15]), "<", $unit)
-    if $delta < 2 * 60;
-  return relative_time_format(fg($c[15]), $ret, $unit)
-    if $delta < 45 * 60;
-
-  ## 0.75 < hour < 42
-  $unit = "hour";
+  ## hours
   $ret = int($ret/60);
+  return relative_time_format(fg($c[9]), $ret, 'hour ')
+      if $delta < 2 * $hrs;
+  return relative_time_format(fg($c[9]), $ret, 'hrs  ')
+    if $delta <= 12 * $hrs;
+  return relative_time_format(fg($c[9]), '<1', 'day  ')
+      if ($delta > 12 * $hrs) && ($delta < 24 * $hrs);
 
-  return relative_time_format(fg($c[9]), "<", $unit)
-    if $delta < 90 * 60;
-  return relative_time_format(fg($c[9]), $ret, $unit)
-    if $delta < 24 * 60 * 60;
-  return relative_time_format(fg($c[9]), $ret, $unit)
-    if $delta < 30 * 60 * 60;
-  return relative_time_format(fg($c[9]), $ret, $unit)
-    if $delta < 36 * 60 * 60;
-
-  ## 0.75 < day < 30
-  $unit = "day ";
+  ## days
   $ret = int($ret/24);
+  return relative_time_format(fg($c[4]), $ret, 'day  ')
+      if $delta < 2 * $days;
+  return relative_time_format(fg($c[4]), $ret, 'days ')
+    if $delta < 31 * $days;
 
-  return relative_time_format(fg($c[4]), "<", $unit)
-    if $delta < 48 * 60 * 60;
-  return relative_time_format(fg($c[4]), $ret, $unit)
-    if $delta < 7 * 24 * 60 * 60;
-  return relative_time_format(fg($c[4]), $ret, $unit)
-    if $delta < 14 * 24 * 60 * 60;
-  return relative_time_format(fg($c[4]), $ret, $unit)
-    if $delta < 28 * 24 * 60 * 60;
-  return relative_time_format(fg($c[4]), $ret, $unit)
-    if $delta < 30 * 24 * 60 * 60;
-
-  ## 1 < month < 12
-  $unit = "mon ";
+  ## months
   $ret = int($ret/30);
+  return relative_time_format(fg($c[14]), $ret, 'month')
+      if $delta < 2 * $mos;
+  return relative_time_format(fg($c[14]), $ret, 'mos  ')
+    if $delta < 12 * $mos;
 
-  return relative_time_format(fg($c[14]), "<", $unit)
-    if $delta < 2 * 30 * 24 * 60 * 60;
-  return relative_time_format(fg($c[14]), $ret, $unit)
-    if $delta < 12 * 30 * 24 * 60 * 60;
-
-  ## 1 < years < inf
-  $unit = "year";
+  ## years
   $ret = int($ret/12);
-
-  return relative_time_format(fg($c[0]), $ret, $unit);
+  return relative_time_format(fg($c[0]), $ret, 'year ')
+      if $delta < 2 * $yrs;
+  return relative_time_format(fg($c[0]), $ret, 'yrs  ');
 }
 
 
@@ -627,7 +614,8 @@ sub get_ls_cmdline {
     return '-lvGcTh ' . join('', @ls_opts);
   }
 
-  return '-hlv --group-directories-first --color=always --time=ctime ' .
+  #return '-ahFlv --color=always --time=ctime ' .
+  return '-ahFlv --color=always ' .
          '--time-style=+%s ' . join('', @ls_opts);
 }
 
